@@ -1,3 +1,5 @@
+import { createClient } from "@sanity/client";
+
 type SanityBlockChild = {
   text?: string;
 };
@@ -33,20 +35,13 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "sghjj8v9";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION ?? "2025-01-01";
 
-const client = {
-  async fetch<T>(query: string, params?: Record<string, unknown>): Promise<T> {
-    const { createClient } = await import("@sanity/client");
-    const sanityClient = createClient({
-      projectId,
-      dataset,
-      apiVersion,
-      useCdn: true,
-      perspective: "published",
-    });
-
-    return sanityClient.fetch<T>(query, params ?? {});
-  }
-};
+const sanityClient = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false,
+  perspective: "published",
+});
 
 function normalizeDate(date: string | undefined): string {
   if (!date) return "";
@@ -99,7 +94,7 @@ export async function getJournalPosts(): Promise<JournalPost[]> {
   }`;
 
   try {
-    const posts = await client.fetch<SanityJournalPost[]>(query);
+    const posts = await sanityClient.fetch<SanityJournalPost[]>(query);
     return (posts ?? []).map(normalizePost);
   } catch (error) {
     console.error("Failed to fetch journal posts from Sanity", error);
@@ -121,7 +116,7 @@ export async function getJournalPost(slug: string): Promise<JournalPost | null> 
   }`;
 
   try {
-    const post = await client.fetch<SanityJournalPost | null>(query, { slug });
+    const post = await sanityClient.fetch<SanityJournalPost | null>(query, { slug });
     return post ? normalizePost(post) : null;
   } catch (error) {
     console.error(`Failed to fetch journal post '${slug}' from Sanity`, error);
