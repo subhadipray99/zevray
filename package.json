@@ -1,0 +1,29 @@
+{
+  "name": "zevray-studio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "studio": "sanity dev",
+    "studio:deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/client": "^8.6.2",
+    "@sanity/vision": "^6.14.1",
+    "next": "15.5.2",
+    "react": "19.2.2",
+    "react-dom": "19.2.2",
+    "sanity": "^6.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.21",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.31.0",
+    "eslint-config-next": "15.5.2",
+    "typescript": "5.8.3"
+  }
+}
